@@ -13,3 +13,7 @@ add the following two lines to [services] section of your ~/.tucan/tucan.conf fi
 
 nhacso.net = /home/{your-username}/.tucan/plugins/nhacso/
 mp3.zing.vn = /home/{your-username}/.tucan/plugins/zing/
+
+Notes
+=====
+Remember that current version only works with single file, NOT playlist.
