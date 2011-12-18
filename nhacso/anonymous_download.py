@@ -74,9 +74,9 @@ class AnonymousDownload(DownloadPlugin):
 						break
 					else:
 						size_found = 0
-				#remove from old version: 
-				#if '<songlink><![CDATA[' in line:
-					#songlink =line.split('<songlink><![CDATA[')[1].split(']]></songlink>')[0].strip()
+				if '<songlink><![CDATA[' in line:
+					songlink =line.split('<songlink><![CDATA[')[1].split(']]></songlink>')[0].strip()
+					#Removed this rule as it's too strict
 					#if not (songlink == url):
 						#name = None
 						#size = -1
