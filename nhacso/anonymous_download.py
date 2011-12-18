@@ -74,13 +74,14 @@ class AnonymousDownload(DownloadPlugin):
 						break
 					else:
 						size_found = 0
-				if '<songlink><![CDATA[' in line:
-					songlink =line.split('<songlink><![CDATA[')[1].split(']]></songlink>')[0].strip()
-					if not (songlink == url):
-						name = None
-						size = -1
-						unit = None
-						break
+				#remove from old version: 
+				#if '<songlink><![CDATA[' in line:
+					#songlink =line.split('<songlink><![CDATA[')[1].split(']]></songlink>')[0].strip()
+					#if not (songlink == url):
+						#name = None
+						#size = -1
+						#unit = None
+						#break
 				if '<artist><![CDATA[' in line:
 					name +=' - '+line.split('<artist><![CDATA[')[1].split(']]></artist>')[0].strip()
 					name += '.mp3'
