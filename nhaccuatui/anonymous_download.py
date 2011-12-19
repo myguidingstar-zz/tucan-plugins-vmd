@@ -34,14 +34,15 @@ class AnonymousDownload(DownloadPlugin):
 		try:
 			page = URLOpen().open(url)
 			for lines in page:
-				if 'xmlURL=http://mp3.zing.vn/xml/song-xml/' in lines:
-					songxml = lines.split('xmlURL=http://mp3.zing.vn/xml/song-xml/')[1].split('&skin=http://static.mp3.zing.vn/skins')[0].strip()
-					xml = URLOpen().open('http://mp3.zing.vn/xml/song-xml/'+songxml)
+				if '<param value="flashid=flash-player&defaultindex=0&autostart=true&file=http://www.nhaccuatui.com/api/playerv7.ashx?key2=' in lines:
+					songxml = lines.split('<param value="flashid=flash-player&defaultindex=0&autostart=true&file=http://www.nhaccuatui.com/api/playerv7.ashx?key2=')[1].split('" name="flashvars" />')[0].strip()
+					xml = URLOpen().open('http://www.nhaccuatui.com/api/playerv7.ashx?key2='+songxml)
 					for line in xml:
-						if '<source><![CDATA[' in line:
-							mp3link = line.split('<source><![CDATA[')[1].split(']]></source>')[0].strip()
-					if not mp3link:
-						return
+						#urlib2 doesn't accept spaces, so just quote it!
+						mp3link = 'http://'+urllib.quote(line.split('<location><![CDATA[http://')[1].split(']]></location>')[0].strip())
+						if not mp3link:
+							return
+						break #there 's only one line
 		except Exception, e:
 			logger.exception("%s: %s" % (url, e))
 		else:
@@ -60,32 +61,29 @@ class AnonymousDownload(DownloadPlugin):
 		unit = None
 		size_found = 0
 		try:
-			# 'xmlURL=http://mp3.zing.vn/xml/song-xml/'
 			page = URLOpen().open(url)
 			for lines in page:
-				if 'xmlURL=http://mp3.zing.vn/xml/song-xml/' in lines:
-					songxml = lines.split('xmlURL=http://mp3.zing.vn/xml/song-xml/')[1].split('&skin=http://static.mp3.zing.vn/skins')[0].strip()
-					xml = URLOpen().open('http://mp3.zing.vn/xml/song-xml/'+songxml)
+				if '<param value="flashid=flash-player&defaultindex=0&autostart=true&file=http://www.nhaccuatui.com/api/playerv7.ashx?key2=' in lines:
+					songxml = lines.split('<param value="flashid=flash-player&defaultindex=0&autostart=true&file=http://www.nhaccuatui.com/api/playerv7.ashx?key2=')[1].split('" name="flashvars" />')[0].strip()
+					xml = URLOpen().open('http://www.nhaccuatui.com/api/playerv7.ashx?key2='+songxml)
 					for line in xml:
-						if '<title><![CDATA[' in line:
-							name = line.split('<title><![CDATA[')[1].split(']]></title>')[0].strip()
-						if '<source><![CDATA[' in line:
-							mp3link = line.split('<source><![CDATA[')[1].split(']]></source>')[0].strip()
-							#get file size before download
-							site = urllib.urlopen(mp3link)
-							meta = site.info()
-							size = int(meta.getheaders("Content-Length")[0]) / 1024
-							if size > 1024:
-								unit = "KB"
-							else:
-								size_found = 0
-								name = None
-								size = -1
-								unit = None
-								break
-						if '<performer><![CDATA[' in line:
-							name +=' - '+line.split('<performer><![CDATA[')[1].split(']]></performer>')[0].strip()
-							name += '.mp3'
+						name =line.split('<title><![CDATA[')[1].split(']]></title>')[0].strip()
+						name +=' - '+line.split('<creator><![CDATA[')[1].split(']]></creator>')[0].strip()
+						name += '.mp3'
+						mp3link = line.split('<location><![CDATA[')[1].split(']]></location>')[0].strip()
+						#get file size before download
+						site = urllib.urlopen(mp3link)
+						meta = site.info()
+						size = int(meta.getheaders("Content-Length")[0]) / 1024
+						if size > 1024:
+							unit = "KB"
+						else:
+							size_found = 0
+							name = None
+							size = -1
+							unit = None
+							break
+
 
 		except Exception, e:
 			name = None

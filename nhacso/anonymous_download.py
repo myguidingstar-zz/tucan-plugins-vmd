@@ -32,8 +32,8 @@ class AnonymousDownload(DownloadPlugin):
 		""""""
 		link = None
 		try:
-			it = URLOpen().open('http://nhacso.net/flash/song/xnl/1/id/'+url[-13:-5])
-			for line in it:
+			xml = URLOpen().open('http://nhacso.net/flash/song/xnl/1/id/'+url[-13:-5])
+			for line in xml:
 				if '<mp3link><![CDATA[' in line:
 					mp3link = line.split('<mp3link><![CDATA[')[1].split(']]></mp3link>')[0].strip()
 			if not mp3link:
@@ -56,8 +56,8 @@ class AnonymousDownload(DownloadPlugin):
 		unit = None
 		size_found = 0
 		try:
-			it = URLOpen().open('http://nhacso.net/flash/song/xnl/1/id/'+url[-13:-5])
-			for line in it:
+			xml = URLOpen().open('http://nhacso.net/flash/song/xnl/1/id/'+url[-13:-5])
+			for line in xml:
 				if '<name><![CDATA[' in line:
 					name = line.split('<name><![CDATA[')[1].split(']]></name>')[0].strip()
 				if '<mp3link><![CDATA[' in line:
@@ -68,20 +68,16 @@ class AnonymousDownload(DownloadPlugin):
 					size = int(meta.getheaders("Content-Length")[0]) / 1024
 					if size > 1024:
 						unit = "KB"
+					else:
+						size_found = 0
 						name = None
 						size = -1
 						unit = None
 						break
-					else:
-						size_found = 0
+
+
 				if '<songlink><![CDATA[' in line:
 					songlink =line.split('<songlink><![CDATA[')[1].split(']]></songlink>')[0].strip()
-					#Removed this rule as it's too strict
-					#if not (songlink == url):
-						#name = None
-						#size = -1
-						#unit = None
-						#break
 				if '<artist><![CDATA[' in line:
 					name +=' - '+line.split('<artist><![CDATA[')[1].split(']]></artist>')[0].strip()
 					name += '.mp3'
