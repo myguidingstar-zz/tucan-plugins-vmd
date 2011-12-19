@@ -1,7 +1,7 @@
 Tucan plugins for downloading from some Vietnam free online music sites
 License: GPL-3
 
-Currently supports nhacso.net and mp3.zing.vn
+Currently supports nhacso.net, mp3.zing.vn and nhaccuatui.com
 Feel free to contribute more sites. We need your help ;)
 
 Installation
@@ -9,10 +9,11 @@ Installation
 To use these plugins you must have Tucan installed on your system.
 Copy these direcories into your Tucan's plugin directory. It's usually on ~/.tucan/plugins/
 If the new plugins are not automatically displayed in Tucan's plugin list after doing that,
-add the following two lines to [services] section of your ~/.tucan/tucan.conf file
+add the following three lines to [services] section of your ~/.tucan/tucan.conf file
 
 nhacso.net = /home/{your-username}/.tucan/plugins/nhacso/
 mp3.zing.vn = /home/{your-username}/.tucan/plugins/zing/
+nhaccuatui.com = /home/{your-username}/.tucan/plugins/nhaccuatui/
 
 Notes
 =====
